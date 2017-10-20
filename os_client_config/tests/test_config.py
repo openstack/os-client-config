@@ -224,6 +224,7 @@ class TestConfig(base.TestCase):
         self.assertEqual(
             ['a-private', 'another-private', 'split-no-default'],
             cc.get_internal_networks())
+        self.assertEqual('a-public', cc.get_nat_source())
         self.assertEqual('another-private', cc.get_nat_destination())
         self.assertEqual('another-public', cc.get_default_network())
         self.assertEqual(
@@ -239,6 +240,7 @@ class TestConfig(base.TestCase):
         cc = c.get_one_cloud('_test-cloud-domain-scoped_')
         self.assertEqual([], cc.get_external_networks())
         self.assertEqual([], cc.get_internal_networks())
+        self.assertIsNone(cc.get_nat_source())
         self.assertIsNone(cc.get_nat_destination())
         self.assertIsNone(cc.get_default_network())
 
@@ -1019,6 +1021,7 @@ class TestBackwardsCompatibility(base.TestCase):
             'networks': [
                 {'name': 'private', 'routes_externally': False,
                  'nat_destination': False, 'default_interface': False,
+                 'nat_source': False,
                  'routes_ipv4_externally': False,
                  'routes_ipv6_externally': False},
             ]
