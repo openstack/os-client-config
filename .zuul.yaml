@@ -1,0 +1,8 @@
+- project:
+    name: openstack/os-client-config
+    templates:
+      - shade-tox-tips
+    check:
+      jobs:
+        - legacy-osc-dsvm-functional-tips:
+            voting: false
