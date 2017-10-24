@@ -4,5 +4,7 @@
       - shade-tox-tips
     check:
       jobs:
-        - legacy-osc-dsvm-functional-tips:
-            voting: false
+        - osc-functional-devstack-tips
+    gate:
+      jobs:
+        - osc-functional-devstack-tips
