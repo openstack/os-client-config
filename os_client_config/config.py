@@ -69,6 +69,8 @@ VENDOR_FILES = [
 
 BOOL_KEYS = ('insecure', 'cache')
 
+FORMAT_EXCLUSIONS = frozenset(['password'])
+
 
 # NOTE(dtroyer): This turns out to be not the best idea so let's move
 #                overriding defaults to a kwarg to OpenStackConfig.__init__()
@@ -1077,7 +1079,7 @@ class OpenStackConfig(object):
 
         # If any of the defaults reference other values, we need to expand
         for (key, value) in config.items():
-            if hasattr(value, 'format'):
+            if hasattr(value, 'format') and key not in FORMAT_EXCLUSIONS:
                 config[key] = value.format(**config)
 
         force_ipv4 = config.pop('force_ipv4', self.force_ipv4)
@@ -1172,7 +1174,7 @@ class OpenStackConfig(object):
 
         # If any of the defaults reference other values, we need to expand
         for (key, value) in config.items():
-            if hasattr(value, 'format'):
+            if hasattr(value, 'format') and key not in FORMAT_EXCLUSIONS:
                 config[key] = value.format(**config)
 
         force_ipv4 = config.pop('force_ipv4', self.force_ipv4)
