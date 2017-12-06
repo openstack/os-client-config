@@ -167,12 +167,14 @@ class CloudConfig(object):
         # What's even more amazing is that they did it AGAIN with cinder v3
         # And then I learned that mistral copied it.
         if service_type == 'volume':
-            if self.get_api_version(service_type).startswith('2'):
+            vol_type = self.get_api_version(service_type)
+            if vol_type and vol_type.startswith('2'):
                 service_type = 'volumev2'
-            elif self.get_api_version(service_type).startswith('3'):
+            elif vol_type and vol_type.startswith('3'):
                 service_type = 'volumev3'
         elif service_type == 'workflow':
-            if self.get_api_version(service_type).startswith('2'):
+            wk_type = self.get_api_version(service_type)
+            if wk_type and wk_type.startswith('2'):
                 service_type = 'workflowv2'
         return self.config.get(key, service_type)
 
