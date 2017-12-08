@@ -3,3 +3,9 @@
     templates:
       - shade-functional-tips
       - shade-tox-tips
+    check:
+      jobs:
+        - osc-functional-devstack-tips
+    gate:
+      jobs:
+        - osc-functional-devstack-tips
