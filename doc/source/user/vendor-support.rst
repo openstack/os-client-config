@@ -42,6 +42,8 @@ van1           Vancouver, BC
 betacloud
 ---------
 
+https://api-1.betacloud.io:5000/v3
+
 ============== ==================
 Region Name    Location
 ============== ==================
