@@ -1,5 +1,4 @@
 - project:
-    name: openstack/os-client-config
     templates:
       - shade-functional-tips
       - shade-tox-tips
