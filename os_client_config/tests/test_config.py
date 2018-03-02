@@ -21,9 +21,10 @@ import fixtures
 import testtools
 import yaml
 
+from openstack.config import defaults
+
 from os_client_config import cloud_config
 from os_client_config import config
-from os_client_config import defaults
 from os_client_config import exceptions
 from os_client_config.tests import base
 
@@ -966,13 +967,6 @@ class TestConfigDefault(base.TestCase):
         cc = c.get_one_cloud(cloud='_test-cloud_', argparse=None)
         self._assert_cloud_details(cc)
         self.assertEqual('password', cc.auth_type)
-
-    def test_set_default_before_init(self):
-        config.set_default('identity_api_version', '4')
-        c = config.OpenStackConfig(config_files=[self.cloud_yaml],
-                                   vendor_files=[self.vendor_yaml])
-        cc = c.get_one_cloud(cloud='_test-cloud_', argparse=None)
-        self.assertEqual('4', cc.identity_api_version)
 
 
 class TestBackwardsCompatibility(base.TestCase):

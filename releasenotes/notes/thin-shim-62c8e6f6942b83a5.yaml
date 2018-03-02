@@ -1,0 +1,13 @@
+---
+prelude: >
+    os-client-config is now a thin shim around openstacksdk. It exists and
+    will continue to exist provide backward compatibility.
+upgrade:
+  - |
+    ``get_region_name`` no longer supports pre-service region name overrides.
+    An ``os_client_config.cloud_config.CloudConfig`` object represents a region
+    of a cloud. The support was originally added for compatibility with the
+    similar feature in openstacksdk's ``Profile``. Both the support for
+    service regions and the ``Profile`` object have been removed from
+    openstacksdk, so there is no need to attempt to add a compatibility layer
+    here as there is nothing that has the ability to consume it.

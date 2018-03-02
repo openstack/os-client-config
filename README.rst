@@ -5,6 +5,11 @@ os-client-config
 .. image:: http://governance.openstack.org/badges/os-client-config.svg
     :target: http://governance.openstack.org/reference/tags/index.html
 
+.. warning::
+  `os-client-config` has been superceded by `openstacksdk`_. While
+  `os-client-config` will continue to exist, it is highly recommended that
+  users transition to using `openstacksdk`_ directly.
+
 `os-client-config` is a library for collecting client configuration for
 using an OpenStack cloud in a consistent and comprehensive manner. It
 will find cloud config for as few as 1 cloud and as many as you want to
@@ -23,3 +28,5 @@ Source
 * Documentation: http://docs.openstack.org/os-client-config/latest
 * Source: http://git.openstack.org/cgit/openstack/os-client-config
 * Bugs: http://bugs.launchpad.net/os-client-config
+
+.. _openstacksdk: http://docs.openstack.org/openstacksdk/latest

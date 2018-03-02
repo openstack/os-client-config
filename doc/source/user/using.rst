@@ -63,7 +63,7 @@ Constructing OpenStack SDK object
 If what you want to do is get an OpenStack SDK Connection and you want it to
 do all the normal things related to clouds.yaml, `OS_` environment variables,
 a helper function is provided. The following will get you a fully configured
-`openstacksdk` instance.
+`openstack.connection.Connection` instance.
 
 .. code-block:: python
 

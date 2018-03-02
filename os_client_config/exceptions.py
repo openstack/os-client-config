@@ -12,9 +12,9 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from openstack import exceptions
 
-class OpenStackConfigException(Exception):
-    """Something went wrong with parsing your OpenStack Config."""
+OpenStackConfigException = exceptions.ConfigException
 
 
 class OpenStackConfigVersionException(OpenStackConfigException):
