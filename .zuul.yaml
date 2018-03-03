@@ -1,4 +1,42 @@
+- job:
+    name: os-client-config-tox-py27-tips
+    parent: openstack-tox-py27
+    description: |
+      Run tox python 27 unittests against master of important libs
+    vars:
+      tox_install_siblings: true
+      zuul_work_dir: src/git.openstack.org/openstack/os-client-config
+    required-projects:
+      - openstack/keystoneauth
+      - openstack/python-openstacksdk
+      - openstack/os-client-config
+
+- job:
+    name: os-client-config-tox-py35-tips
+    parent: openstack-tox-py35
+    description: |
+      Run tox python 35 unittests against master of important libs
+    vars:
+      tox_install_siblings: true
+      zuul_work_dir: src/git.openstack.org/openstack/os-client-config
+    required-projects:
+      - openstack/keystoneauth
+      - openstack/python-openstacksdk
+      - openstack/os-client-config
+
+- project-template:
+    name: os-client-config-tox-tips
+    check:
+      jobs:
+        - os-client-config-tox-py27-tips
+        - os-client-config-tox-py35-tips
+    gate:
+      jobs:
+        - os-client-config-tox-py27-tips
+        - os-client-config-tox-py35-tips
+
 - project:
     templates:
+      - os-client-config-tox-tips
       - shade-functional-tips
       - shade-tox-tips
