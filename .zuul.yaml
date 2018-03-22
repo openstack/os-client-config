@@ -43,6 +43,8 @@
     check:
       jobs:
         - osc-functional-devstack-tips
+        - openstack-tox-lower-constraints
     gate:
       jobs:
         - osc-functional-devstack-tips
+        - openstack-tox-lower-constraints
