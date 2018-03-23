@@ -8,7 +8,7 @@
       zuul_work_dir: src/git.openstack.org/openstack/os-client-config
     required-projects:
       - openstack/keystoneauth
-      - openstack/python-openstacksdk
+      - openstack/openstacksdk
       - openstack/os-client-config
 
 - job:
@@ -21,7 +21,7 @@
       zuul_work_dir: src/git.openstack.org/openstack/os-client-config
     required-projects:
       - openstack/keystoneauth
-      - openstack/python-openstacksdk
+      - openstack/openstacksdk
       - openstack/os-client-config
 
 - project-template:
