@@ -10,7 +10,7 @@ os-client-config
   `os-client-config` will continue to exist, it is highly recommended that
   users transition to using `openstacksdk`_ directly.
 
-.. _openstacksdk: https//docs.openstack.org/openstacksdk/latest
+.. _openstacksdk: https://docs.openstack.org/openstacksdk/latest
 
 `os-client-config` is a library for collecting client configuration for
 using an OpenStack cloud in a consistent and comprehensive manner. It
