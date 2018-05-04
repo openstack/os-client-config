@@ -27,6 +27,27 @@ class OpenStackConfig(loader.OpenStackConfig):
     get_one_cloud = loader.OpenStackConfig.get_one
     get_all_clouds = loader.OpenStackConfig.get_all
 
+    def get_cache_expiration_time(self):
+        return int(self._cache_expiration_time)
+
+    def get_cache_interval(self):
+        return self.get_cache_expiration_time()
+
+    def get_cache_max_age(self):
+        return self.get_cache_expiration_time()
+
+    def get_cache_path(self):
+        return self._cache_path
+
+    def get_cache_class(self):
+        return self._cache_class
+
+    def get_cache_arguments(self):
+        return copy.deepcopy(self._cache_arguments)
+
+    def get_cache_expiration(self):
+        return copy.deepcopy(self._cache_expiration)
+
 
 if __name__ == '__main__':
     config = OpenStackConfig().get_all_clouds()
