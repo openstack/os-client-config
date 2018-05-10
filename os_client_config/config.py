@@ -12,6 +12,9 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import copy
+import sys
+
 from openstack.config import loader
 from openstack.config.loader import *  # noqa
 
