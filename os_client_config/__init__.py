@@ -18,6 +18,7 @@ import pbr.version
 
 from os_client_config import cloud_config
 from os_client_config.config import OpenStackConfig  # noqa
+from os_client_config import vendors  # noqa
 
 
 __version__ = pbr.version.VersionInfo('os_client_config').version_string()
