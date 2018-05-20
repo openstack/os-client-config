@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    Fixed regression in vendor data importing caused by the merge with
+    openstacksdk.
