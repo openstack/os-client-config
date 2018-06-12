@@ -2,8 +2,8 @@
 os-client-config
 ================
 
-.. image:: http://governance.openstack.org/badges/os-client-config.svg
-    :target: http://governance.openstack.org/reference/tags/index.html
+.. image:: https://governance.openstack.org/tc/badges/os-client-config.svg
+    :target: https://governance.openstack.org/tc/reference/tags/index.html
 
 .. warning::
   `os-client-config` has been superceded by `openstacksdk`_. While
