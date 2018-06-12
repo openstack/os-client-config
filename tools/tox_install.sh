@@ -4,6 +4,7 @@
 # with installing the client from source. We should remove the version pin in
 # the constraints file before applying it for from-source installation.
 
+CLIENT_NAME=os-client-config
 CONSTRAINTS_FILE=$1
 shift 1
 
@@ -25,6 +26,11 @@ pip install -c$localfile openstack-requirements
 # the current repo. It is listed in constraints file and thus any
 # install will be constrained and we need to unconstrain it.
 edit-constraints $localfile -- $CLIENT_NAME
+
+if [ -z "$*" ]; then
+    echo "No packages to be installed."
+    exit 0
+fi
 
 pip install -c$localfile -U $*
 exit $?
