@@ -28,5 +28,6 @@ Source
 * Documentation: http://docs.openstack.org/os-client-config/latest
 * Source: http://git.openstack.org/cgit/openstack/os-client-config
 * Bugs: http://bugs.launchpad.net/os-client-config
+* Release Notes https://docs.openstack.org/releasenotes/os-client-config
 
 .. _openstacksdk: http://docs.openstack.org/openstacksdk/latest
