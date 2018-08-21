@@ -41,11 +41,11 @@
       - shade-functional-tips
       - shade-tox-tips
       - check-requirements
-      - publish-openstack-sphinx-docs
+      - publish-openstack-docs-pti
       - openstack-python-jobs
       - openstack-python35-jobs
       - lib-forward-testing
-      - release-notes-jobs
+      - release-notes-jobs-python3
     check:
       jobs:
         - osc-functional-devstack-tips
