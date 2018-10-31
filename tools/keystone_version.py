@@ -16,7 +16,7 @@
 import os_client_config
 import pprint
 import sys
-import urlparse
+import six.moves.urllib.parse as urlparse
 
 
 def print_versions(r):
