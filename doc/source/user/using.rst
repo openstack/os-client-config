@@ -92,13 +92,13 @@ If you want to do the same thing but also support command line parsing.
 It should be noted that OpenStack SDK has ways to construct itself that allow
 for additional flexibility. If the helper function here does not meet your
 needs, you should see the `from_config` method of
-`openstack.connection.Connection <http://developer.openstack.org/sdks/python/openstacksdk/users/guides/connect_from_config.html>`_
+`openstack.connection.Connection <https://developer.openstack.org/sdks/python/openstacksdk/users/guides/connect_from_config.html>`_
 
 Constructing shade objects
 --------------------------
 
 If what you want to do is get a
-`shade <http://docs.openstack.org/infra/shade/>`_ OpenStackCloud object, a
+`shade <https://docs.openstack.org/infra/shade/>`_ OpenStackCloud object, a
 helper function that honors clouds.yaml and `OS_` environment variables is
 provided. The following will get you a fully configured `OpenStackCloud`
 instance.
