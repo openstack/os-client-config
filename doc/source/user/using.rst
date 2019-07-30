@@ -92,7 +92,7 @@ If you want to do the same thing but also support command line parsing.
 It should be noted that OpenStack SDK has ways to construct itself that allow
 for additional flexibility. If the helper function here does not meet your
 needs, you should see the `from_config` method of
-`openstack.connection.Connection <https://developer.openstack.org/sdks/python/openstacksdk/users/guides/connect_from_config.html>`_
+`openstack.connection.Connection <https://docs.openstack.org/openstacksdk/latest//user/guides/connect_from_config.html>`_
 
 Constructing shade objects
 --------------------------
