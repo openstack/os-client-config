@@ -1,17 +1,4 @@
 - job:
-    name: os-client-config-tox-py27-tips
-    parent: openstack-tox-py27
-    description: |
-      Run tox python 27 unittests against master of important libs
-    vars:
-      tox_install_siblings: true
-      zuul_work_dir: src/opendev.org/openstack/os-client-config
-    required-projects:
-      - openstack/keystoneauth
-      - openstack/openstacksdk
-      - openstack/os-client-config
-
-- job:
     name: os-client-config-tox-py37-tips
     parent: openstack-tox-py37
     description: |
@@ -28,21 +15,17 @@
     name: os-client-config-tox-tips
     check:
       jobs:
-        - os-client-config-tox-py27-tips
         - os-client-config-tox-py37-tips
     gate:
       jobs:
-        - os-client-config-tox-py27-tips
         - os-client-config-tox-py37-tips
 
 - project:
     templates:
       - check-requirements
-      - lib-forward-testing
       - lib-forward-testing-python3
       - openstack-lower-constraints-jobs
-      - openstack-python-jobs
-      - openstack-python3-train-jobs
+      - openstack-python3-ussuri-jobs
       - os-client-config-tox-tips
       - publish-openstack-docs-pti
       - release-notes-jobs-python3
@@ -50,7 +33,9 @@
       - shade-tox-tips
     check:
       jobs:
+        - openstack-tox-pep8
         - osc-functional-devstack-tips
     gate:
       jobs:
+        - openstack-tox-pep8
         - osc-functional-devstack-tips
