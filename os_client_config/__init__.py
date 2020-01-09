@@ -65,6 +65,8 @@ def make_rest_client(
         app_name=app_name, app_version=app_version,
         **kwargs)
     return cloud.get_session_client(service_key, version=version)
+
+
 # Backwards compat - simple_client was a terrible name
 simple_client = make_rest_client
 # Backwards compat - session_client was a terrible name
