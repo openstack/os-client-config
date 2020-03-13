@@ -11,10 +11,10 @@
 # under the License.
 
 import copy
+from unittest import mock
 
 from keystoneauth1 import exceptions as ksa_exceptions
 from keystoneauth1 import session as ksa_session
-import mock
 
 from openstack.config import cloud_region
 
