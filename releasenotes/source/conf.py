@@ -21,13 +21,13 @@
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #needs_sphinx = '1.0'
-import openstackdocstheme
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
     'reno.sphinxext',
+    'openstackdocstheme'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -45,6 +45,11 @@ master_doc = 'index'
 # General information about the project.
 project = u'os-client-config Release Notes'
 copyright = u'2015, os-client-config developers'
+
+# openstackdocstheme options
+openstackdocs_repo_name = 'openstack/os-client-config'
+openstackdocs_auto_name = False
+openstackdocs_use_storyboard = True
 
 # Release notes do not need a version in the title, they span
 # multiple versions.
@@ -83,7 +88,7 @@ exclude_patterns = []
 #show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+pygments_style = 'native'
 
 # A list of ignored prefixes for module index sorting.
 #modindex_common_prefix = []
@@ -102,10 +107,6 @@ html_theme = 'openstackdocs'
 # further.  For a list of options available for each theme, see the
 # documentation.
 #html_theme_options = {}
-
-# Add any paths that contain custom themes here, relative to this directory.
-#html_theme_path = []
-html_theme_path = [openstackdocstheme.get_html_theme_path()]
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
