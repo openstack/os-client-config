@@ -1,8 +1,8 @@
 - job:
-    name: os-client-config-tox-py37-tips
-    parent: openstack-tox-py37
+    name: os-client-config-tox-py38-tips
+    parent: openstack-tox-py38
     description: |
-      Run tox python 37 unittests against master of important libs
+      Run tox python 38 unittests against master of important libs
     vars:
       tox_install_siblings: true
       zuul_work_dir: src/opendev.org/openstack/os-client-config
@@ -15,22 +15,21 @@
     name: os-client-config-tox-tips
     check:
       jobs:
-        - os-client-config-tox-py37-tips
+        - os-client-config-tox-py38-tips
     gate:
       jobs:
-        - os-client-config-tox-py37-tips
+        - os-client-config-tox-py38-tips
 
 - project:
     templates:
       - check-requirements
       - lib-forward-testing-python3
-      - openstack-lower-constraints-jobs
-      - openstack-python3-ussuri-jobs
+      - openstack-python3-zed-jobs
       - os-client-config-tox-tips
       - publish-openstack-docs-pti
       - release-notes-jobs-python3
-      - shade-functional-tips
-      - shade-tox-tips
+      # - shade-functional-tips
+      # - shade-tox-tips
     check:
       jobs:
         - openstack-tox-pep8
