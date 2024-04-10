@@ -22,7 +22,6 @@ import tempfile
 
 from os_client_config import cloud_config
 
-import extras
 import fixtures
 from oslotest import base
 import yaml
@@ -230,7 +229,7 @@ class TestCase(base.BaseTestCase):
 
     def _assert_cloud_details(self, cc):
         self.assertIsInstance(cc, cloud_config.CloudConfig)
-        self.assertTrue(extras.safe_hasattr(cc, 'auth'))
+        self.assertTrue(hasattr(cc, 'auth'))
         self.assertIsInstance(cc.auth, dict)
         self.assertIsNone(cc.cloud)
         self.assertIn('username', cc.auth)
