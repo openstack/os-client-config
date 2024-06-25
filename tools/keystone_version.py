@@ -16,7 +16,7 @@
 import os_client_config
 import pprint
 import sys
-import six.moves.urllib.parse as urlparse
+import urllib.parse
 
 
 def print_versions(r):
@@ -59,7 +59,7 @@ for cloud in os_client_config.OpenStackConfig().get_all_clouds():
         continue
     if 'version' in r:
         print_version(r['version'])
-        url = urlparse.urlparse(endpoint)
+        url = urllib.parse.urlparse(endpoint)
         parts = url.path.split(':')
         if len(parts) == 2:
             path, port = parts
@@ -69,7 +69,7 @@ for cloud in os_client_config.OpenStackConfig().get_all_clouds():
         stripped = path.rsplit('/', 2)[0]
         if port:
             stripped = '{stripped}:{port}'.format(stripped=stripped, port=port)
-        endpoint = urlparse.urlunsplit(
+        endpoint = urllib.parse.urlunsplit(
             (url.scheme, url.netloc, stripped, url.params, url.query))
         print("  also {endpoint}".format(endpoint=endpoint))
         try:
