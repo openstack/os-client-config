@@ -69,7 +69,9 @@ class TestConfig(base.TestCase):
                 }
             }
         })
+        secure_conf = base._write_yaml({})
         c = config.OpenStackConfig(config_files=[single_conf],
+                                   secure_files=[secure_conf],
                                    vendor_files=[self.vendor_yaml])
         cc = c.get_one_cloud()
         self.assertEqual(cc.name, 'single')
