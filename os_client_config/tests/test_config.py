@@ -319,63 +319,74 @@ class TestConfig(base.TestCase):
         c = config.OpenStackConfig(config_files=[self.cloud_yaml],
                                    vendor_files=[self.vendor_yaml],
                                    secure_files=[self.no_yaml])
-        region = c._get_region(cloud='_test-cloud_no_region')
-        self.assertEqual(region, {'name': '', 'values': {}})
+        cloud = c.get_one(cloud='_test-cloud_no_region')
+        self.assertEqual("", cloud.region)
 
     def test_get_region_no_region(self):
         c = config.OpenStackConfig(config_files=[self.cloud_yaml],
                                    vendor_files=[self.vendor_yaml],
                                    secure_files=[self.no_yaml])
-        region = c._get_region(cloud='_test-cloud_no_region',
-                               region_name='override-region')
-        self.assertEqual(region, {'name': 'override-region', 'values': {}})
+        cloud = c.get_one(cloud='_test-cloud_no_region',
+                          region_name='override-region')
+        self.assertEqual('override-region', cloud.region)
 
     def test_get_region_region_is_none(self):
         c = config.OpenStackConfig(config_files=[self.cloud_yaml],
                                    vendor_files=[self.vendor_yaml],
                                    secure_files=[self.no_yaml])
-        region = c._get_region(cloud='_test-cloud_no_region', region_name=None)
-        self.assertEqual(region, {'name': '', 'values': {}})
+        cloud = c.get_one(cloud='_test-cloud_no_region', region_name=None)
+        self.assertEqual("", cloud.region)
 
     def test_get_region_region_set(self):
         c = config.OpenStackConfig(config_files=[self.cloud_yaml],
                                    vendor_files=[self.vendor_yaml],
                                    secure_files=[self.no_yaml])
-        region = c._get_region(cloud='_test-cloud_', region_name='test-region')
-        self.assertEqual(region, {'name': 'test-region', 'values': {}})
+        cloud = c.get_one(cloud='_test-cloud_', region_name='test-region')
+        self.assertEqual("test-region", cloud.region)
 
     def test_get_region_many_regions_default(self):
         c = config.OpenStackConfig(config_files=[self.cloud_yaml],
                                    vendor_files=[self.vendor_yaml],
                                    secure_files=[self.no_yaml])
-        region = c._get_region(cloud='_test_cloud_regions',
-                               region_name='')
-        self.assertEqual(region, {'name': 'region1', 'values':
-                         {'external_network': 'region1-network'}})
+        cloud = c.get_one(cloud='_test_cloud_regions', region_name='')
+        self.assertEqual("region1", cloud.region)
+        self.assertEqual("region1-network", cloud.external_network)
 
     def test_get_region_many_regions(self):
         c = config.OpenStackConfig(config_files=[self.cloud_yaml],
                                    vendor_files=[self.vendor_yaml],
                                    secure_files=[self.no_yaml])
-        region = c._get_region(cloud='_test_cloud_regions',
-                               region_name='region2')
-        self.assertEqual(region, {'name': 'region2', 'values':
-                         {'external_network': 'my-network'}})
+        cloud = c.get_one(cloud='_test_cloud_regions', region_name='region2')
+        self.assertEqual("region2", cloud.region)
+        self.assertEqual("my-network", cloud.external_network)
 
     def test_get_region_invalid_region(self):
         c = config.OpenStackConfig(config_files=[self.cloud_yaml],
                                    vendor_files=[self.vendor_yaml],
                                    secure_files=[self.no_yaml])
         self.assertRaises(
-            exceptions.OpenStackConfigException, c._get_region,
+            exceptions.OpenStackConfigException, c.get_one,
             cloud='_test_cloud_regions', region_name='invalid-region')
 
     def test_get_region_no_cloud(self):
-        c = config.OpenStackConfig(config_files=[self.cloud_yaml],
+        single_conf = base._write_yaml({
+            'clouds': {
+                'single': {
+                    'auth': {
+                        'auth_url': 'http://example.com/v2',
+                        'username': 'testuser',
+                        'password': 'testpass',
+                        'project_name': 'testproject',
+                    }
+                }
+            }
+        })
+        secure_conf = base._write_yaml({})
+        c = config.OpenStackConfig(config_files=[single_conf],
                                    vendor_files=[self.vendor_yaml],
-                                   secure_files=[self.no_yaml])
-        region = c._get_region(region_name='no-cloud-region')
-        self.assertEqual(region, {'name': 'no-cloud-region', 'values': {}})
+                                   secure_files=[secure_conf])
+        cloud = c.get_one(region_name='no-cloud-region')
+        self.assertEqual("no-cloud-region", cloud.region)
 
 
 class TestExcludedFormattedConfigValue(base.TestCase):
@@ -697,9 +708,9 @@ class TestConfigArgparse(base.TestCase):
                                    vendor_files=[self.vendor_yaml])
 
         env_args = {'os-compute-api-version': 1}
-        fixed_args = c._fix_args(env_args)
+        cloud = c.get_one(cloud="_test-cloud_", **env_args)
 
-        self.assertDictEqual({'compute_api_version': 1}, fixed_args)
+        self.assertEqual("1", cloud.compute_api_version)
 
     def test_extra_config(self):
         c = config.OpenStackConfig(config_files=[self.cloud_yaml],
@@ -976,17 +987,20 @@ class TestBackwardsCompatibility(base.TestCase):
         c = config.OpenStackConfig(config_files=[self.cloud_yaml],
                                    vendor_files=[self.vendor_yaml])
         cloud = {
+            'auth': {},
             'identity_endpoint_type': 'admin',
             'compute_endpoint_type': 'private',
             'endpoint_type': 'public',
             'auth_type': 'v3password',
         }
-        result = c._fix_backwards_interface(cloud)
+        result = c.magic_fixes(cloud)
         expected = {
             'identity_interface': 'admin',
             'compute_interface': 'private',
             'interface': 'public',
             'auth_type': 'v3password',
+            'auth': {},
+            'networks': [],
         }
         self.assertDictEqual(expected, result)
 
@@ -1000,8 +1014,9 @@ class TestBackwardsCompatibility(base.TestCase):
                 'project-id': 'my_project_id'
             }
         }
-        result = c._fix_backwards_project(cloud)
+        result = c.magic_fixes(cloud)
         expected = {
+            'networks': [],
             'auth_type': 'v2password',
             'auth': {
                 'tenant_name': 'my_project_name',
@@ -1020,8 +1035,9 @@ class TestBackwardsCompatibility(base.TestCase):
                 'project-id': 'my_project_id'
             }
         }
-        result = c._fix_backwards_project(cloud)
+        result = c.magic_fixes(cloud)
         expected = {
+            'networks': [],
             'auth_type': 'password',
             'auth': {
                 'project_name': 'my_project_name',
@@ -1034,6 +1050,7 @@ class TestBackwardsCompatibility(base.TestCase):
         c = config.OpenStackConfig(config_files=[self.cloud_yaml],
                                    vendor_files=[self.vendor_yaml])
         cloud = {
+            'auth': {},
             'external_network': 'public',
             'networks': [
                 {'name': 'private', 'routes_externally': False},
@@ -1041,17 +1058,20 @@ class TestBackwardsCompatibility(base.TestCase):
         }
         self.assertRaises(
             exceptions.OpenStackConfigException,
-            c._fix_backwards_networks, cloud)
+            c.magic_fixes, cloud)
 
     def test_backwards_network(self):
         c = config.OpenStackConfig(config_files=[self.cloud_yaml],
                                    vendor_files=[self.vendor_yaml])
         cloud = {
+            'auth': {},
             'external_network': 'public',
             'internal_network': 'private',
         }
-        result = c._fix_backwards_networks(cloud)
+        result = c.magic_fixes(cloud)
         expected = {
+            'auth': {},
+            'auth_type': None,
             'external_network': 'public',
             'internal_network': 'private',
             'networks': [
@@ -1067,12 +1087,15 @@ class TestBackwardsCompatibility(base.TestCase):
         c = config.OpenStackConfig(config_files=[self.cloud_yaml],
                                    vendor_files=[self.vendor_yaml])
         cloud = {
+            'auth': {},
             'networks': [
                 {'name': 'private'}
             ]
         }
-        result = c._fix_backwards_networks(cloud)
+        result = c.magic_fixes(cloud)
         expected = {
+            'auth_type': None,
+            'auth': {},
             'networks': [
                 {'name': 'private', 'routes_externally': False,
                  'nat_destination': False, 'default_interface': False,
@@ -1087,6 +1110,7 @@ class TestBackwardsCompatibility(base.TestCase):
         c = config.OpenStackConfig(config_files=[self.cloud_yaml],
                                    vendor_files=[self.vendor_yaml])
         cloud = {
+            'auth': {},
             'networks': [
                 {'name': 'blue', 'default_interface': True},
                 {'name': 'purple', 'default_interface': True},
@@ -1094,4 +1118,4 @@ class TestBackwardsCompatibility(base.TestCase):
         }
         self.assertRaises(
             exceptions.OpenStackConfigException,
-            c._fix_backwards_networks, cloud)
+            c.magic_fixes, cloud)
