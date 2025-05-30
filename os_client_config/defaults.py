@@ -17,7 +17,8 @@ import os
 from openstack.config import defaults
 
 _json_path = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)), 'defaults.json')
+    os.path.dirname(os.path.realpath(__file__)), 'defaults.json'
+)
 
 
 def get_defaults():
