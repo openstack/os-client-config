@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # Copyright 2010-2011 OpenStack Foundation
 # Copyright (c) 2013 Hewlett-Packard Development Company, L.P.
 #
@@ -98,30 +96,37 @@ USER_CONF = {
                 'domain_id': '6789',
                 'project_domain_id': '123456789',
             },
-            'networks': [{
-                'name': 'a-public',
-                'routes_externally': True,
-                'nat_source': True,
-            }, {
-                'name': 'another-public',
-                'routes_externally': True,
-                'default_interface': True,
-            }, {
-                'name': 'a-private',
-                'routes_externally': False,
-            }, {
-                'name': 'another-private',
-                'routes_externally': False,
-                'nat_destination': True,
-            }, {
-                'name': 'split-default',
-                'routes_externally': True,
-                'routes_ipv4_externally': False,
-            }, {
-                'name': 'split-no-default',
-                'routes_ipv6_externally': False,
-                'routes_ipv4_externally': True,
-                }],
+            'networks': [
+                {
+                    'name': 'a-public',
+                    'routes_externally': True,
+                    'nat_source': True,
+                },
+                {
+                    'name': 'another-public',
+                    'routes_externally': True,
+                    'default_interface': True,
+                },
+                {
+                    'name': 'a-private',
+                    'routes_externally': False,
+                },
+                {
+                    'name': 'another-private',
+                    'routes_externally': False,
+                    'nat_destination': True,
+                },
+                {
+                    'name': 'split-default',
+                    'routes_externally': True,
+                    'routes_ipv4_externally': False,
+                },
+                {
+                    'name': 'split-no-default',
+                    'routes_ipv6_externally': False,
+                    'routes_ipv4_externally': True,
+                },
+            ],
             'region_name': 'test-region',
         },
         '_test_cloud_regions': {
@@ -136,14 +141,14 @@ USER_CONF = {
                     'name': 'region1',
                     'values': {
                         'external_network': 'region1-network',
-                    }
+                    },
                 },
                 {
                     'name': 'region2',
                     'values': {
                         'external_network': 'my-network',
-                    }
-                }
+                    },
+                },
             ],
         },
         '_test_cloud_hyphenated': {
@@ -202,7 +207,7 @@ class TestCase(base.BaseTestCase):
     """Test case base class for all unit tests."""
 
     def setUp(self):
-        super(TestCase, self).setUp()
+        super().setUp()
 
         self.useFixture(fixtures.NestedTempfile())
         conf = copy.deepcopy(USER_CONF)
@@ -212,10 +217,12 @@ class TestCase(base.BaseTestCase):
         self.secure_yaml = _write_yaml(SECURE_CONF)
         self.vendor_yaml = _write_yaml(VENDOR_CONF)
         self.no_yaml = _write_yaml(NO_CONF)
-        self.useFixture(fixtures.MonkeyPatch(
-            'os_client_config.__version__', '1.2.3'))
-        self.useFixture(fixtures.MonkeyPatch(
-            'openstack.version.__version__', '3.4.5'))
+        self.useFixture(
+            fixtures.MonkeyPatch('os_client_config.__version__', '1.2.3')
+        )
+        self.useFixture(
+            fixtures.MonkeyPatch('openstack.version.__version__', '3.4.5')
+        )
 
         # Isolate the test runs from the environment
         # Do this as two loops because you can't modify the dict in a loop

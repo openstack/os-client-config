@@ -23,7 +23,6 @@ from os_client_config import defaults
 
 
 class OpenStackConfig(loader.OpenStackConfig):
-
     _cloud_region_class = cloud_config.CloudConfig
     _defaults_module = defaults
 
@@ -59,10 +58,10 @@ if __name__ == '__main__':
         if len(sys.argv) == 1:
             print_cloud = True
         elif len(sys.argv) == 3 and (
-                sys.argv[1] == cloud.name and sys.argv[2] == cloud.region):
+            sys.argv[1] == cloud.name and sys.argv[2] == cloud.region
+        ):
             print_cloud = True
-        elif len(sys.argv) == 2 and (
-                sys.argv[1] == cloud.name):
+        elif len(sys.argv) == 2 and (sys.argv[1] == cloud.name):
             print_cloud = True
 
         if print_cloud:

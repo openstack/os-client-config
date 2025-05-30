@@ -26,39 +26,35 @@ def _get_client(service_key):
     class_mapping = constructors.get_constructor_mapping()
     if service_key not in class_mapping:
         raise exceptions.OpenStackConfigException(
-            "Service {service_key} is unkown. Please pass in a client"
-            " constructor or submit a patch to os-client-config".format(
-                service_key=service_key))
+            f"Service {service_key} is unkown. Please pass in a client"
+            " constructor or submit a patch to os-client-config"
+        )
     mod_name, ctr_name = class_mapping[service_key].rsplit('.', 1)
     lib_name = mod_name.split('.')[0]
     try:
         mod = importlib.import_module(mod_name)
     except ImportError:
         raise exceptions.OpenStackConfigException(
-            "Client for '{service_key}' was requested, but"
-            " {mod_name} was unable to be imported. Either import"
+            f"Client for '{service_key}' was requested, but"
+            f" {mod_name} was unable to be imported. Either import"
             " the module yourself and pass the constructor in as an argument,"
-            " or perhaps you do not have python-{lib_name} installed.".format(
-                service_key=service_key,
-                mod_name=mod_name,
-                lib_name=lib_name))
+            f" or perhaps you do not have python-{lib_name} installed."
+        )
     try:
         ctr = getattr(mod, ctr_name)
     except AttributeError:
         raise exceptions.OpenStackConfigException(
-            "Client for '{service_key}' was requested, but although"
-            " {mod_name} imported fine, the constructor at {fullname}"
+            f"Client for '{service_key}' was requested, but although"
+            f" {mod_name} imported fine, the constructor at {class_mapping[service_key]}"
             " as not found. Please check your installation, we have no"
-            " clue what is wrong with your computer.".format(
-                service_key=service_key,
-                mod_name=mod_name,
-                fullname=class_mapping[service_key]))
+            " clue what is wrong with your computer."
+        )
     return ctr
 
 
 class CloudConfig(cloud_region.CloudRegion):
     def __init__(self, *args, **kwargs):
-        super(CloudConfig, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.log = _log.setup_logging(__name__)
 
     def __getattr__(self, key):
@@ -74,8 +70,9 @@ class CloudConfig(cloud_region.CloudRegion):
 
     def insert_user_agent(self):
         self._keystone_session.additional_user_agent.append(
-            ('os-client-config', os_client_config.__version__))
-        super(CloudConfig, self).insert_user_agent()
+            ('os-client-config', os_client_config.__version__)
+        )
+        super().insert_user_agent()
 
     @property
     def region(self):
@@ -88,9 +85,16 @@ class CloudConfig(cloud_region.CloudRegion):
         return self.get_cache_expirations()
 
     def get_legacy_client(
-            self, service_key, client_class=None, interface_key=None,
-            pass_version_arg=True, version=None, min_version=None,
-            max_version=None, **kwargs):
+        self,
+        service_key,
+        client_class=None,
+        interface_key=None,
+        pass_version_arg=True,
+        version=None,
+        min_version=None,
+        max_version=None,
+        **kwargs,
+    ):
         """Return a legacy OpenStack client object for the given config.
 
         Most of the OpenStack python-*client libraries have the same
@@ -136,7 +140,8 @@ class CloudConfig(cloud_region.CloudRegion):
         interface = self.get_interface(service_key)
         # trigger exception on lack of service
         endpoint = self.get_session_endpoint(
-            service_key, min_version=min_version, max_version=max_version)
+            service_key, min_version=min_version, max_version=max_version
+        )
         endpoint_override = self.get_endpoint(service_key)
 
         if service_key == 'object-store':
@@ -145,14 +150,17 @@ class CloudConfig(cloud_region.CloudRegion):
                 os_options=dict(
                     service_type=self.get_service_type(service_key),
                     object_storage_url=endpoint_override,
-                    region_name=self.region))
+                    region_name=self.region,
+                ),
+            )
         else:
             constructor_kwargs = dict(
                 session=self.get_session(),
                 service_name=self.get_service_name(service_key),
                 service_type=self.get_service_type(service_key),
                 endpoint_override=endpoint_override,
-                region_name=self.region)
+                region_name=self.region,
+            )
 
         if service_key == 'image':
             # os-client-config does not depend on glanceclient, but if
@@ -160,6 +168,7 @@ class CloudConfig(cloud_region.CloudRegion):
             # would need to do if they were requesting 'image' - then
             # they necessarily have glanceclient installed
             from glanceclient.common import utils as glance_utils
+
             endpoint, detected_version = glance_utils.strip_version(endpoint)
             # If the user has passed in a version, that's explicit, use it
             if not version:
@@ -176,6 +185,7 @@ class CloudConfig(cloud_region.CloudRegion):
                 version = self.get_api_version(service_key)
             if not version and service_key == 'volume':
                 from cinderclient import client as cinder_client
+
                 version = cinder_client.get_volume_api_from_url(endpoint)
             # Temporary workaround while we wait for python-openstackclient
             # to be able to handle 2.0 which is what neutronclient expects
@@ -198,14 +208,16 @@ class CloudConfig(cloud_region.CloudRegion):
                 constructor_kwargs['version'] = version
             if min_version and min_version > float(version):
                 raise exceptions.OpenStackConfigVersionException(
-                    "Minimum version {min_version} requested but {version}"
-                    " found".format(min_version=min_version, version=version),
-                    version=version)
+                    f"Minimum version {min_version} requested but {version}"
+                    " found",
+                    version=version,
+                )
             if max_version and max_version < float(version):
                 raise exceptions.OpenStackConfigVersionException(
-                    "Maximum version {max_version} requested but {version}"
-                    " found".format(max_version=max_version, version=version),
-                    version=version)
+                    f"Maximum version {max_version} requested but {version}"
+                    " found",
+                    version=version,
+                )
         if service_key == 'database':
             # TODO(mordred) Remove when https://review.openstack.org/314032
             # has landed and released. We're passing in a Session, but the
@@ -217,8 +229,11 @@ class CloudConfig(cloud_region.CloudRegion):
         if not interface_key:
             if service_key in ('image', 'key-manager'):
                 interface_key = 'interface'
-            elif (service_key == 'identity'
-                  and version and version.startswith('3')):
+            elif (
+                service_key == 'identity'
+                and version
+                and version.startswith('3')
+            ):
                 interface_key = 'interface'
             else:
                 interface_key = 'endpoint_type'

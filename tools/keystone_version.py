@@ -35,8 +35,9 @@ def print_version(version):
     if version['status'] in ('CURRENT', 'stable'):
         print(
             "\tVersion ID: {id} updated {updated}".format(
-                id=version.get('id'),
-                updated=version.get('updated')))
+                id=version.get('id'), updated=version.get('updated')
+            )
+        )
 
 
 verbose = '-v' in sys.argv
@@ -55,7 +56,7 @@ for cloud in os_client_config.OpenStackConfig().get_all_clouds():
         if verbose:
             pprint.pprint(r)
     except Exception as e:
-        print("Error with {cloud}: {e}".format(cloud=cloud.name, e=str(e)))
+        print(f"Error with {cloud.name}: {str(e)}")
         continue
     if 'version' in r:
         print_version(r['version'])
@@ -68,10 +69,11 @@ for cloud in os_client_config.OpenStackConfig().get_all_clouds():
             port = None
         stripped = path.rsplit('/', 2)[0]
         if port:
-            stripped = '{stripped}:{port}'.format(stripped=stripped, port=port)
+            stripped = f'{stripped}:{port}'
         endpoint = urllib.parse.urlunsplit(
-            (url.scheme, url.netloc, stripped, url.params, url.query))
-        print("  also {endpoint}".format(endpoint=endpoint))
+            (url.scheme, url.netloc, stripped, url.params, url.query)
+        )
+        print(f"  also {endpoint}")
         try:
             r = c.get(endpoint).json()
             if verbose:
@@ -84,6 +86,6 @@ for cloud in os_client_config.OpenStackConfig().get_all_clouds():
         elif 'versions' in r:
             print_versions(r['versions'])
         else:
-            print("\n\nUNKNOWN\n\n{r}".format(r=r))
+            print(f"\n\nUNKNOWN\n\n{r}")
     else:
         print_versions(r['versions'])
