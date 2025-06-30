@@ -13,6 +13,7 @@
 # under the License.
 
 import sys
+import warnings
 
 import pbr.version
 
@@ -20,9 +21,15 @@ from os_client_config import cloud_config
 from os_client_config.config import OpenStackConfig  # noqa
 from os_client_config import vendors  # noqa
 
-
 __version__ = pbr.version.VersionInfo('os_client_config').version_string()
 _config = None
+
+
+warnings.warn(
+    'os-client-config is no longer maintained. You should switch to '
+    'openstacksdk or an alternative library.',
+    DeprecationWarning,
+)
 
 
 def get_config(
