@@ -47,7 +47,7 @@ class TestConfig(base.TestCase):
             '_test_cloud_regions'
         ]
         configured_clouds = [cloud.name for cloud in clouds]
-        self.assertItemsEqual(user_clouds, configured_clouds)
+        self.assertCountEqual(user_clouds, configured_clouds)
 
     def test_get_one_cloud(self):
         c = config.OpenStackConfig(
