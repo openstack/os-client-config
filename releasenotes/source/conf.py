@@ -1,6 +1,6 @@
 #
-# Os-Client-Config Release Notes documentation build configuration file, created by
-# sphinx-quickstart on Thu Nov  5 11:50:32 2015.
+# Os-Client-Config Release Notes documentation build configuration file,
+# created by sphinx-quickstart on Thu Nov  5 11:50:32 2015.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.

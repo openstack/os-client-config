@@ -26,8 +26,8 @@ def _get_client(service_key):
     class_mapping = constructors.get_constructor_mapping()
     if service_key not in class_mapping:
         raise exceptions.OpenStackConfigException(
-            f"Service {service_key} is unkown. Please pass in a client"
-            " constructor or submit a patch to os-client-config"
+            f"Service {service_key} is unkown. Please pass in a client "
+            f"constructor or submit a patch to os-client-config"
         )
     mod_name, ctr_name = class_mapping[service_key].rsplit('.', 1)
     lib_name = mod_name.split('.')[0]
@@ -35,19 +35,21 @@ def _get_client(service_key):
         mod = importlib.import_module(mod_name)
     except ImportError:
         raise exceptions.OpenStackConfigException(
-            f"Client for '{service_key}' was requested, but"
-            f" {mod_name} was unable to be imported. Either import"
-            " the module yourself and pass the constructor in as an argument,"
-            f" or perhaps you do not have python-{lib_name} installed."
+            f"Client for '{service_key}' was requested, but "
+            f"{mod_name} was unable to be imported. Either import "
+            f"the module yourself and pass the constructor in as an "
+            f"argument, or perhaps you do not have python-{lib_name} "
+            f"installed."
         )
     try:
         ctr = getattr(mod, ctr_name)
     except AttributeError:
         raise exceptions.OpenStackConfigException(
-            f"Client for '{service_key}' was requested, but although"
-            f" {mod_name} imported fine, the constructor at {class_mapping[service_key]}"
-            " as not found. Please check your installation, we have no"
-            " clue what is wrong with your computer."
+            f"Client for '{service_key}' was requested, but although "
+            f"{mod_name} imported fine, the constructor at "
+            f"{class_mapping[service_key]} was not found. "
+            f"Please check your installation, we have no "
+            f"clue what is wrong with your computer."
         )
     return ctr
 
